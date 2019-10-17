@@ -1,0 +1,41 @@
+{% load bootstrap4 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  {% bootstrap_css %}
+  <title>Document</title>
+</head>
+<body>
+    <ul class="nav justify-content-center">
+      <li class="nav-item">
+        <a class="nav-link active" href="{% url 'questions:index' %}">홈</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="{% url 'questions:create' %}">글쓰기</a>
+      </li>
+      {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link disabled" >{{user.username}}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'accounts:logout' %}">로그아웃</a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'accounts:signup' %}">회원가입</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'accounts:login' %}">로그인</a>
+        </li>
+      {% endif %}
+    </ul>
+  <div class="container">
+    {% block body %}
+    {% endblock %}
+  </div>
+  {% bootstrap_javascript jquery='full' %}
+</body>
+</html>

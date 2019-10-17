@@ -1,0 +1,43 @@
+{% extends 'questions/base.html' %}
+{% load bootstrap4 %}
+{% block body %}
+  <div class="jumbotron">
+    <h1 class="display-4 text-center">{{question.title}}</h1>
+    <p class="lead text-center">{{question.choice_1}} vs {{question.choice_2}}</p>
+    
+    <div class="progress my-3">
+      <div class="progress-bar" role="progressbar" style="width: {{persent_1}}%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">{{persent_1|floatformat}}%</div>
+      <div class="progress-bar bg-danger" role="progressbar" style="width: {{persent_2}}%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">{{persent_2|floatformat}}%</div>
+    </div>
+
+    <a href="{% url 'questions:update' question.id %}" class="btn btn-warning">수정</a>
+    <form action="{% url 'questions:delete' question.id %}" method="post" class="d-inline">
+      {% csrf_token %}
+      <input type="submit" value="삭제" class="btn btn-danger">
+    </form>
+    <hr class="my-4">
+
+    <a href="" class="btn btn-primary">왼쪽</a>
+    <a href="" class="btn btn-danger">오른쪽</a>
+    <form action="{% url 'questions:choice_create' question.id %}" method="post">
+      {% csrf_token %}
+      {% bootstrap_form choice_form %}
+      <input type="submit" value="고르기" class="btn btn-light">
+    </form>
+
+    {% for choice in question.choice_set.all %}
+    
+    {% if choice.pick == 1 %}
+        <div class="alert alert-primary" role="alert">
+      {% else %}
+        <div class="alert alert-danger" role="alert">
+      {% endif %}
+          {{choice.comment}}
+          <form action="{% url 'questions:choice_delete' question.id choice.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="삭제" class="btn btn-dark">
+          </form>
+        </div>
+    {% endfor %}
+  </div>
+{% endblock %}
